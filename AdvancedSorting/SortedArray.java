@@ -10,7 +10,7 @@ public class SortedArray {		// Takes in an int array and a sorting option. Produ
 	int passes;
 	int comparisons;
 	int exchanges;
-	String sortType;
+	String sortName;
 	int[] sortedIntArray;
 
 	// Full Constructor
@@ -22,17 +22,20 @@ public class SortedArray {		// Takes in an int array and a sorting option. Produ
 		}
         
 		switch (sortOption) {          // Passes inputArray to sorting algorithm depending on option
-			case 1:  // Selection Sort
-				sortType = "Selection Sort";
-				this.sortedIntArray = selectionSort(arrayToSort);
+			case 1:  // Merge Sort
+				sortName = "Merge Sort";
+				mergeSort(arrayToSort, 0, arrayToSort.length - 1);
+				sortedIntArray = arrayToSort;
 				break;
-			case 2:  // Bubble Sort
-				sortType = "Bubble Sort";
-				this.sortedIntArray = bubbleSort(arrayToSort);
+			case 2:  // Heap Sort
+				sortName = "Heap Sort";
+				heapSort(arrayToSort);
+				sortedIntArray = arrayToSort;
 				break;
-			case 3:  // Insertion Sort
-				sortType = "Insertion Sort";
-				this.sortedIntArray = insertionSort(arrayToSort);
+			case 3:  // Quick Sort
+				sortName = "Quick Sort";
+				quicksort(arrayToSort, 0, arrayToSort.length - 1);
+				sortedIntArray = arrayToSort;
 				break;
 			default:
 				throw new IllegalArgumentException("Invalid Sorting Option");
@@ -45,17 +48,20 @@ public class SortedArray {		// Takes in an int array and a sorting option. Produ
 		int[] arrayToSort = Arrays.copyOf(INT_ARRAY, INT_ARRAY.length); // Deep copies input array
 
 		switch (sortOption) {          // Passes inputArray to sorting algorithm depending on option
-			case 1:  // Selection Sort
-				sortType = "Selection Sort";
-				this.sortedIntArray = selectionSort(arrayToSort);
+			case 1:  // Merge Sort
+				sortName = "Merge Sort";
+				mergeSort(arrayToSort, 0, arrayToSort.length - 1);
+				sortedIntArray = arrayToSort;
 				break;
-			case 2:  // Bubble Sort
-				sortType = "Bubble Sort";
-				this.sortedIntArray = bubbleSort(arrayToSort);
+			case 2:  // Heap Sort
+				sortName = "Heap Sort";
+				heapSort(arrayToSort);
+				sortedIntArray = arrayToSort;
 				break;
-			case 3:  // Insertion Sort
-				sortType = "Insertion Sort";
-				this.sortedIntArray = insertionSort(arrayToSort);
+			case 3:  // Quick Sort
+				sortName = "Quick Sort";
+				quicksort(arrayToSort, 0, arrayToSort.length - 1);
+				sortedIntArray = arrayToSort;
 				break;
 			default:
 				throw new IllegalArgumentException("Invalid Sorting Option");
@@ -80,7 +86,7 @@ public class SortedArray {		// Takes in an int array and a sorting option. Produ
 	}
 
 	public String getSortType() {
-		return this.sortType;
+		return this.sortName;
 	}
 
 	// toString
@@ -93,75 +99,164 @@ public class SortedArray {		// Takes in an int array and a sorting option. Produ
     //////// SORTING ALGORITHMS /////////
 
 
-	//// Selection Sort
-	public int[] selectionSort(int[] arrayToSort) {
-		for (int i = 0; i < arrayToSort.length; i++) {
-			int min = arrayToSort[i];
-			int minId = i;
-			for (int j = i+1; j < arrayToSort.length; j++) { // Pass Start
-				comparisons += 1;			 // Increment comparisons
-				if (arrayToSort[j] < min) {   // Comparison
-					min = arrayToSort[j];
-					minId = j;
+	//// Merge Sort
+	public void mergeSort(int[] array, int left, int right) {
+		comparisons++;
+		if (right <= left) return;  										// Comparison
+		int mid = (left+right)/2;											// Exchange
+		exchanges++;
+		mergeSort(array, left, mid);
+		mergeSort(array, mid+1, right);
+		merge(array, left, mid, right);
+		passes++;
+	}
+
+	// Merge method
+	void merge(int[] array, int left, int mid, int right) {
+		// calculating lengths
+		int lengthLeft = mid - left + 1;
+		int lengthRight = right - mid;
+	
+		// creating temporary subarrays
+		int leftArray[] = new int [lengthLeft];
+		int rightArray[] = new int [lengthRight];
+	
+		// copying our sorted subarrays into temporaries
+		for (int i = 0; i < lengthLeft; i++)
+			leftArray[i] = array[left+i];							// Exchange
+			exchanges++;
+		for (int i = 0; i < lengthRight; i++)
+			rightArray[i] = array[mid+i+1];							// Exchange
+			exchanges++;
+	
+		// iterators containing current index of temp subarrays
+		int leftIndex = 0;
+		int rightIndex = 0;
+	
+		// copying from leftArray and rightArray back into array
+		for (int i = left; i < right + 1; i++) {
+			// if there are still uncopied elements in R and L, copy minimum of the two
+			comparisons++;
+			if (leftIndex < lengthLeft && rightIndex < lengthRight) {					// Comparison
+				comparisons++;
+				if (leftArray[leftIndex] < rightArray[rightIndex]) {					// Comparison
+					array[i] = leftArray[leftIndex];									// Exchange
+					leftIndex++;
+					exchanges++;
+				}
+				else {
+					array[i] = rightArray[rightIndex];									// Exchange
+					rightIndex++;
+					exchanges++;
 				}
 			}
-			// Pass Complete
-			passes += 1;
-
-			// Exchange
-			int temp = arrayToSort[i];
-			arrayToSort[i] = min;
-			arrayToSort[minId] = temp;
-			exchanges += 1; 		// Increment exchanges
-		}
-
-		return arrayToSort;
-	}
-
-
-	//// Bubble Sort
-	public int[] bubbleSort(int[] arrayToSort) {
-		boolean sorted = false;
-		int temp;
-		while (!sorted) {
-			sorted = true;
-			for (int i = 0; i < arrayToSort.length - 1; i++) {
-				comparisons += 1;						   // Increment comparisons
-				if (arrayToSort[i] > arrayToSort[i + 1]) {   // Comparison
-					temp = arrayToSort[i];
-					arrayToSort[i] = arrayToSort[i + 1];  // Exchange
-					arrayToSort[i + 1] = temp;           // Exchange
-					exchanges += 1;                     // Increment exchanges
-					sorted = false;
-				}
+			// if all the elements have been copied from rightArray, copy the rest of leftArray
+			else if (leftIndex < lengthLeft) {	
+				comparisons++;										// Comparison
+				array[i] = leftArray[leftIndex];										// Exchange
+				leftIndex++;
+				exchanges++;
 			}
-			// Pass Complete
-			passes += 1;   // Increment passes
-		}
-		return arrayToSort;
-	}
-
-
-	//// Insertion Sort
-	public int[] insertionSort(int[] arrayToSort) {
-		for (int i = 1; i < arrayToSort.length; i++) {
-			int current = arrayToSort[i];
-			int j = i - 1;
-			while(j >= 0 && current < arrayToSort[j]) {  // Comparison
-				comparisons += 1;
-				arrayToSort[j+1] = arrayToSort[j];    // Exchange
-				j--;								// Exchange
-				exchanges += 1;    // Increment exchanges
+			// if all the elements have been copied from leftArray, copy the rest of rightArray
+			else if (rightIndex < lengthRight) {
+				comparisons++;										// Comparison
+				exchanges++;
+				array[i] = rightArray[rightIndex];										// Exchange
+				rightIndex++;
 			}
-			// j is either -1
-			// or it's at the first element where current >= a[j]
-			arrayToSort[j+1] = current;
-
-			// Pass complete
-			passes += 1;    // Increment passes
 		}
-		return arrayToSort;
 	}
+
+
+	//// Heap Sort
+	public void heapSort(int[] array) {
+		if (array.length == 0) {
+			return;
+		}
+		
+		int length = array.length;
+		
+		// Moving from the first element that isn't a leaf towards the root
+		for (int i = length / 2 - 1; i >= 0; i--) {
+			heapify(array, length, i);
+			passes++;
+		}
+		
+		for (int i = length - 1; i >= 0; i--) {
+			int tmp = array[0];
+			array[0] = array[i];
+			array[i] = tmp;
+			heapify(array, i, 0);
+			passes++;
+		}
+	}
+
+
+	private void heapify(int[] array, int length, int i) {
+		int left = 2 * i + 1;
+		int right = 2 * i + 2;
+		int largest = i;
+		
+		comparisons++;
+		if (left < length && array[left] > array[largest]) {					// Comparison
+			largest = left;														// Exchange
+			exchanges++;
+		}
+
+		comparisons++;
+		if (right < length && array[right] > array[largest]) {					// Comparison
+			largest = right;													// Exchange
+			exchanges++;
+		}
+		comparisons++;
+		if (largest != i) {														// Comparison
+			int tmp = array[i];
+			array[i] = array[largest];
+			array[largest] = tmp;												// Exchange
+			exchanges++;
+			heapify(array, length, largest);
+		}
+	}
+
+	
+
+
+	//// Quick Sort
+	public void quicksort(int[] arr, int low, int high){
+		comparisons++;
+		if(low < high){												// Comparison
+			int p = partition(arr, low, high);
+			quicksort(arr, low, p-1);
+			quicksort(arr, p+1, high);
+			passes++;
+		}
+	}
+
+	private int partition(int[] arr, int low, int high){
+		int p = low, j;												// Exchange
+		exchanges++;
+		for(j=low+1; j <= high; j++) {
+			comparisons++;
+			if(arr[j] < arr[low]) {									// Comparison
+				swap(arr, ++p, j);									// Exchange
+				exchanges++;
+			}	
+		}
+		
+				
+	
+		swap(arr, low, p);											// Exchange
+		exchanges++;
+		return p;
+	}
+
+	private void swap(int[] arr, int low, int pivot){
+		int tmp = arr[low];
+		arr[low] = arr[pivot];									
+		arr[pivot] = tmp;
+	}
+
+	
 
 
 
