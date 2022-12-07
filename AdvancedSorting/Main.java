@@ -17,9 +17,9 @@ class Main {
 			System.out.println(Arrays.toString(intArray));
 
 			System.out.println("\nChoose a sorting algorithm: ");
-			System.out.println("1. Selection Sort");
-			System.out.println("2. Bubble Sort");
-			System.out.println("3. Insertion Sort");
+			System.out.println("1. Merge Sort");
+			System.out.println("2. Heap Sort");
+			System.out.println("3. Quick Sort");
 			System.out.println("4. Exit Program\n");
 
 			System.out.print("Enter: ");
