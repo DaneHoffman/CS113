@@ -11,11 +11,27 @@ public class SortedArray {
     SortedArray(int[] inputArray, int sortOption) {
         
 
+	// Getters
+	public int getPasses() {
+		return this.passes;
     }
     
+	public int getComparisons() {
+		return this.comparisons;
+	}
 
+	public int getExchanges() {
+		return this.exchanges;
+	}
 
-    //// SORTING ALGORITHMS
+	public String getSortType() {
+		return this.sortType;
+	}
+
+	// toString
+	public String toString() {
+		return Arrays.toString(this.sortedArray);
+	}
 
 
 
