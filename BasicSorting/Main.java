@@ -16,27 +16,39 @@ class Main {
 
 			System.out.println(Arrays.toString(intArray));
 
-			System.out.println("\nOptions: ");
-			System.out.println("1. Sort with BubbleSort");
+			System.out.println("\nChoose a sorting algorithm: ");
+			System.out.println("1. Selection Sort");
+			System.out.println("2. Bubble Sort");
+			System.out.println("3. Insertion Sort");
+			System.out.println("4. Exit Program\n");
+
+			System.out.print("Enter: ");
 			choiceEntry = input.nextInt();
-			switch (choiceEntry) {
-				case 1: // Bubble Sort
-					System.out.println();
-					break;
-				case 2:
-					// ..something else
-					break;
-				case 3:
-					// .. exit program
-					break;
-				case 4: 
-					// Exit menu loop
-					break;
-				default:
-					System.out.println("Choice must be a value between 1 and 4.");
-			}
+
+			if (choiceEntry >= 1 && choiceEntry <= 3) {
+
+				// Pass option to SortedArray class 
+				SortedArray sortedArray = new SortedArray(intArray, choiceEntry);
+
+				System.out.println("\n\n------------------------------------------------");
+				System.out.println("Array sorted with " + sortedArray.getSortType() + ": " + sortedArray.toString());
+				System.out.println("------------------------------------------------");
+				System.out.println("Performance: ");
+				System.out.println("--------------");
+				System.out.println("Passes:" + sortedArray.getPasses());
+				System.out.println("Comparisons:" + sortedArray.getComparisons());
+				System.out.println("Exchanges:" + sortedArray.getExchanges());
+
+				
+
+			} else if (choiceEntry != 4) {
+				System.out.println("Choice must be a value between 1 and 4.");
+			} 
+
 		} while (choiceEntry != 4);
 		input.close();
+
+		
 
 	}
 
