@@ -27,7 +27,7 @@ public class DoubleLinkedList extends AbstractSequentialList<E> {
 		}
 		head = adding;
 
-		size++;m
+		size++;
 	}
 
 
