@@ -1,13 +1,12 @@
-
-// import org.junit.Before;
-// import org.junit.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-// import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 
 /**
  * DoubleLinkedListTest : Test class for the DoubleLinkedList implementation and its constituent ListIterator
